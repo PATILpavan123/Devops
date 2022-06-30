@@ -13,3 +13,22 @@ done
 ---------------------------------------------------------
 
 mail -s "Monitor Report" pavanpatil0744@gmail.com < <( bash monitor.sh )
+
+mail command:
+
+mail -s "Monitor Report" admin@example.com < <( bash monitor.sh )
+
+With sendmail:
+
+echo "Subject: Monitor Report" | sendmail -v admin@example.com  < <( bash monitor.sh )
+
+With ssmtp:
+
+ssmtp admin@example.com < <( echo "Subject: Monitor" ; bash monitor.sh )
+
+With curl and gmail:
+
+bash monitor.sh > report.txt
+curl --url 'smtps://smtp.gmail.com:465' --ssl-reqd \
+  --mail-from 'developer@gmail.com' --mail-rcpt 'admin@example.com' \
+  --upload-file report.txt --user 'developer@gmail.com:your-accout-password'
