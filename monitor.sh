@@ -75,3 +75,25 @@ TO="example@gmail.com"
   mail -s "$SUBJECT" "$TO" < $MESSAGE
   rm /tmp/Mail.out
   fi
+  
+  ---------------
+  
+  #!/bin/bash
+# Shell script to monitor or watch the high Mem-load
+# It will send an email to $ADMIN, if the (memroy load is in %) percentage
+# of Mem-load is >= 80%
+HOSTNAME=`hostname`
+LOAD=80.00
+CAT=/bin/cat
+MAILFILE=/tmp/mailviews
+MAILER=/bin/mail
+mailto="skrishna1@xxx.com"
+MEM_LOAD=`free -t | awk 'FNR == 2 {printf("Current Memory Utilization is : %.2f%"), $3/$2*100}'`
+if [[ $MEM_LOAD > $LOAD ]];
+then
+ PROC=`ps -eo pcpu,pid -o comm= | sort -k1 -n -r | head -1`
+ echo "Please check your processess on ${HOSTNAME} the value of cpu load is $CPU_LOAD % & 
+ $PROC" > $MAILFILE
+ echo "$(ps axo %mem,pid,euser,cmd | sort -nr | head -n 10)" > $MAILFILE
+ $CAT $MAILFILE | $MAILER -s "Memory Utilization is High > 80%, $MEM_LOAD % on ${HOSTNAME}" $mailto
+fi
