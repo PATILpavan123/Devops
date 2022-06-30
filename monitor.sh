@@ -32,3 +32,19 @@ bash monitor.sh > report.txt
 curl --url 'smtps://smtp.gmail.com:465' --ssl-reqd \
   --mail-from 'developer@gmail.com' --mail-rcpt 'admin@example.com' \
   --upload-file report.txt --user 'developer@gmail.com:your-accout-password'
+  
+  --------------
+ #!/bin/bash
+
+CURRENT=$(df / | grep / | awk '{ print $5}' | sed 's/%//g')
+MEMORY=$(free -m | awk 'NR==2{printf "%.2f%%\t\t", $3*100/$2 }')
+DISK=$(df -h | awk '$NF=="/"{printf "%s\t\t", $5}')
+CPU=$(top -bn1 | grep load | awk '{printf "%.2f%%\t\t\n", $(NF-2)}')
+THRESHOLD=20
+
+
+mail -s 'Disk Space Alert' pavanpatil0744@gmail.com << EOF
+
+Your root partition remaining free space is critically low. Used: $CURRENT% $MEMORY $CPU
+
+EOF
