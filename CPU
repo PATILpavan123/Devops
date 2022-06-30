@@ -1,0 +1,3 @@
+if ! ps -e -o pcpu | awk '{c+=$1} END {if(c>75) exit 1;}'; then
+  mailx -s "subject" -c "pavanpatil0744@gmail.com" "pavanpatil0744@gmail.com" < emailbody
+fi
