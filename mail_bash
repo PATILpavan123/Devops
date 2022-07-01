@@ -1,0 +1,24 @@
+
+To install all the required packages
+# yum install procmail mailx sendmail sendmail-cf -y
+
+In your authinfo file, you need to add the below line (Please make sure to use your own username and password)
+
+AuthInfo:smtp.gmail.com "U:your_username" "P:your_password" "M:PLAIN"
+
+Changes in sendmail.mc
+define(`SMART_HOST', `smtp.gmail.com')
+FEATURE(`authinfo')
+
+Update sendmail.cf and authinfo.db file
+# m4 sendmail.mc 'closing_angle_bracket' sendmail.cf  
+# makemap hash authinfo  'opening_angle_bracket'   authinfo
+
+Restart your sendmail service
+# systemctl restart/start sendmail
+
+To send mail
+# mail -s “Subject” user@email.com
+Body
+Ctrl + D
+==========================================================================
